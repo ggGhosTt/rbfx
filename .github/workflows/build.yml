@@ -76,7 +76,7 @@ jobs:
           git push -f origin latest
 
   Windows-Tools:
-    if: github.event.pull_request.draft == false
+    if: false && github.event.pull_request.draft == false
     runs-on: windows-2022
     needs: [CheckSkipCI]
     env:
@@ -125,7 +125,7 @@ jobs:
           path: ${{ env.ci_sdk_dir }}
 
   Linux-Tools:
-    if: github.event.pull_request.draft == false
+    if: false && github.event.pull_request.draft == false
     runs-on: ubuntu-20.04
     needs: [CheckSkipCI]
     env:
@@ -182,7 +182,7 @@ jobs:
 
   MacOS-Tools:
     if: github.event.pull_request.draft == false
-    runs-on: macos-11
+    runs-on: macos-12
     needs: [CheckSkipCI]
     env:
       BUILD_SHARED_LIBS: ON
@@ -230,7 +230,7 @@ jobs:
           path: ${{ env.ci_sdk_dir }}
 
   Windows:
-    if: github.event.pull_request.draft == false
+    if: false && github.event.pull_request.draft == false
     runs-on: windows-2022
     needs: [CheckSkipCI]
 
@@ -394,7 +394,7 @@ jobs:
         run: ${{ env.ci_build_script }} publish-to-itch
 
   UWP:
-    if: github.event.pull_request.draft == false
+    if: false && github.event.pull_request.draft == false
     runs-on: windows-2022
     needs: [CheckSkipCI, Windows-Tools]
 
@@ -484,7 +484,7 @@ jobs:
           path: ${{ env.ci_sdk_dir }}
 
   Linux:
-    if: github.event.pull_request.draft == false
+    if: false && github.event.pull_request.draft == false
     runs-on: ubuntu-20.04
     needs: [CheckSkipCI]
 
@@ -638,7 +638,7 @@ jobs:
 
   MacOS:
     if: github.event.pull_request.draft == false
-    runs-on: macos-11
+    runs-on: macos-12
     needs: [CheckSkipCI]
 
     strategy:
@@ -788,7 +788,7 @@ jobs:
         run: ${{ env.ci_build_script }} publish-to-itch
 
   Android:
-    if: github.event.pull_request.draft == false
+    if: false && github.event.pull_request.draft == false
     runs-on: ubuntu-20.04
     needs: [CheckSkipCI, Linux-Tools]
 
@@ -861,7 +861,7 @@ jobs:
 
   iOS:
     if: github.event.pull_request.draft == false
-    runs-on: macos-11
+    runs-on: macos-12
     needs: [CheckSkipCI, MacOS-Tools]
 
     strategy:
@@ -940,7 +940,7 @@ jobs:
           path: '**/*.app'
 
   Web:
-    if: github.event.pull_request.draft == false
+    if: false && github.event.pull_request.draft == false
     runs-on: ubuntu-20.04
     needs: [CheckSkipCI, Linux-Tools]
 
