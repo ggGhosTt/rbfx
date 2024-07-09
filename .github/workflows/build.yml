@@ -182,7 +182,7 @@ jobs:
 
   MacOS-Tools:
     if: github.event.pull_request.draft == false
-    runs-on: macos-12
+    runs-on: macos-14
     needs: [CheckSkipCI]
     env:
       BUILD_SHARED_LIBS: ON
@@ -637,8 +637,8 @@ jobs:
         run: ${{ env.ci_build_script }} publish-to-itch
 
   MacOS:
-    if: false && github.event.pull_request.draft == false
-    runs-on: macos-12
+    if: github.event.pull_request.draft == false
+    runs-on: macos-14
     needs: [CheckSkipCI]
 
     strategy:
@@ -861,7 +861,7 @@ jobs:
 
   iOS:
     if: github.event.pull_request.draft == false
-    runs-on: macos-12
+    runs-on: macos-14
     needs: [CheckSkipCI, MacOS-Tools]
 
     strategy:
