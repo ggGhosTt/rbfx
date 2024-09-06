@@ -110,7 +110,7 @@ bool RmlUIComponent::BindDataModelVariant(const ea::string& name, Variant* value
     {
         return false;
     }
-    return constructor->BindCustomDataVariable(name, {typeRegister_.GetDefinition<Variant>(), value});
+    return constructor->BindCustomDataVariable(name, {typeRegister_->GetDefinition<Variant>(), value});
 }
 
 bool RmlUIComponent::BindDataModelVariantVector(const ea::string& name, VariantVector* value)
@@ -120,7 +120,7 @@ bool RmlUIComponent::BindDataModelVariantVector(const ea::string& name, VariantV
     {
         return false;
     }
-    return constructor->BindCustomDataVariable(name, {typeRegister_.GetDefinition<VariantVector>(), value});
+    return constructor->BindCustomDataVariable(name, {typeRegister_->GetDefinition<VariantVector>(), value});
 }
 
 bool RmlUIComponent::BindDataModelVariantMap(const ea::string& name, VariantMap* value)
@@ -130,7 +130,7 @@ bool RmlUIComponent::BindDataModelVariantMap(const ea::string& name, VariantMap*
     {
         return false;
     }
-    return constructor->BindCustomDataVariable(name, {typeRegister_.GetDefinition<VariantMap>(), value});
+    return constructor->BindCustomDataVariable(name, {typeRegister_->GetDefinition<VariantMap>(), value});
 }
 
 bool RmlUIComponent::BindDataModelEvent(const ea::string& name, EventFunc eventCallback)
@@ -156,9 +156,10 @@ bool RmlUIComponent::BindDataModelEvent(const ea::string& name, EventFunc eventC
 Rml::DataModelConstructor* RmlUIComponent::ExpectDataModelConstructor() const
 {
     const auto constructor = GetDataModelConstructor();
-    if (!constructor)
+    if (!constructor || !typeRegister_)
     {
         URHO3D_LOGERROR("BindDataModelProperty can only be executed from OnDataModelInitialized");
+        return nullptr;
     }
     return constructor;
 }
@@ -426,9 +427,12 @@ void RmlUIComponent::CreateDataModel()
     RmlUI* ui = GetUI();
     Rml::Context* context = ui->GetRmlContext();
 
+    typeRegister_.emplace();
+
     dataModelName_ = GetDataModelName();
-    modelConstructor_ = ea::make_unique<Rml::DataModelConstructor>(context->CreateDataModel(dataModelName_, &typeRegister_));
-    RegisterVariantDefinition(&typeRegister_);
+    modelConstructor_ =
+        ea::make_unique<Rml::DataModelConstructor>(context->CreateDataModel(dataModelName_, &*typeRegister_));
+    RegisterVariantDefinition(&*typeRegister_);
 
     modelConstructor_->BindFunc(
         "navigable_group", [this](Rml::Variant& result) { result = navigationManager_->GetTopCursorGroup(); });
